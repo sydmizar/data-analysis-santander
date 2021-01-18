@@ -1,6 +1,6 @@
-# Postwork Sesion 04
-# Cambiar directorio de trabajo haciendo uso de SETWD
-setwd("C:/Users/BALAMLAPTOP2/Documents/GitHub/data-analysis-santander/Postworks/Sesion01/")
+# Postwork Sesion 01
+# Cambiar directorio de trabajo haciendo uso de ?setwd
+setwd("C:/Users/BALAMLAPTOP2/Documents/GitHub/data-analysis-santander/Sesion01/Postworks/")
 
 # Actividad 1
 # Importa los datos de soccer de la temporada 2019/2020 de la primera división de la liga española a R, 
