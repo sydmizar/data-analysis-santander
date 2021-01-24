@@ -36,7 +36,7 @@ selecteddata <- lapply(rawdata, select, Date, HomeTeam:FTR)
 # y mutate para arreglar las fechas). Con ayuda de la función rbind forma un único data frame que contenga las seis columnas mencionadas 
 # en el punto 3 (Hint 2: la función do.call podría ser utilizada).
 mutateddata <- lapply(selecteddata, mutate, 
-                      Date = as.Date(Date, "%d/%m/%Y"),
+                      Date = as.Date(Date, "%d/%m/%y"),
                       HomeTeam = as.factor(HomeTeam),
                       AwayTeam = as.factor(AwayTeam),
                       FTHG = as.numeric(FTHG), 
