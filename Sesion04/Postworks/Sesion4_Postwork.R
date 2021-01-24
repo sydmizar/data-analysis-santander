@@ -6,7 +6,39 @@ setwd("C:/Users/BALAMLAPTOP2/Documents/GitHub/data-analysis-santander/Sesion04/P
 # Actividad 1
 # Importa los datos de soccer de la temporada 2019/2020 de la primera división de la liga española a R, 
 # los datos los puedes encontrar en el siguiente enlace: https://www.football-data.co.uk/spainm.php
-football <- read.csv("SP1.csv")
+# football <- read.csv("SP1.csv")
+u1718 <- "https://www.football-data.co.uk/mmz4281/1718/SP1.csv"
+u1819 <- "https://www.football-data.co.uk/mmz4281/1819/SP1.csv"
+u1920 <- "https://www.football-data.co.uk/mmz4281/1920/SP1.csv"
+
+download.file(url = u1718, destfile = "SP1-1718.csv", mode = "wb")
+download.file(url = u1819, destfile = "SP1-1819.csv", mode = "wb")
+download.file(url = u1920, destfile = "SP1-1920.csv", mode = "wb")
+
+# Importamos los datos a R
+
+rawdata <- lapply(list.files(pattern = "*.csv"), read.csv)
+
+
+# Con la función select del paquete dplyr selecciona únicamente las columnas Date, HomeTeam, AwayTeam, FTHG, FTAG y FTR; 
+# esto para cada uno de los data frames. (Hint: también puedes usar lapply).
+
+selecteddata <- lapply(rawdata, select, Date, HomeTeam:FTR)
+
+
+# Asegúrate de que los elementos de las columnas correspondientes de los nuevos data frames sean del mismo tipo (Hint 1: usa as.Date 
+# y mutate para arreglar las fechas). Con ayuda de la función rbind forma un único data frame que contenga las seis columnas mencionadas 
+# en el punto 3 (Hint 2: la función do.call podría ser utilizada).
+mutateddata <- lapply(selecteddata, mutate, 
+                      Date = as.Date(Date, "%d/%m/%y"),
+                      HomeTeam = as.factor(HomeTeam),
+                      AwayTeam = as.factor(AwayTeam),
+                      FTHG = as.numeric(FTHG), 
+                      FTAG = as.numeric(FTAG), 
+                      FTR = as.factor(FTR))
+
+football <- do.call(rbind, mutateddata)
+
 
 # Actividad 2
 # Del data frame que resulta de importar los datos a R, extrae las columnas que contienen los números de goles 
@@ -58,15 +90,26 @@ sum(rft)
 # P(X=0)=P(X=0???Y=0)+P(X=0???Y=1)+P(X=0???Y=2)+P(X=0???Y=3)+...+P(X=0???Y=N)
 # Esta es la suma de todos los elementos en la primera fila de tabla de probabilidades y se repite para cada de las filas en la matriz. Lo mismo se repite para Y sumando las columnas. 
 
-rft <- cbind(rft, px = rowSums(rft))
-rft <- rbind(rft, py = colSums(rft))
+# rft <- cbind(rft, px = rowSums(rft))
+# rft <- rbind(rft, py = colSums(rft))
+# 
+# for (i in 1:length(pm.fthg)){
+#   print(paste("Probabilidad marginal de que el equipo local que juega en casa anote ", i-1, " goles es igual a ", rft[i,7]))
+# }
+# 
+# for (i in 1:length(pm.ftag)){
+#   print(paste("Probabilidad marginal de que el equipo visitante anote ", i-1, " goles es igual a ", rft[8,i]))
+# }
+
+pmarg.gc <- rowSums(rft)
+pmarg.gv <- colSums(rft)
 
 for (i in 1:length(pm.fthg)){
-  print(paste("Probabilidad marginal de que el equipo local que juega en casa anote ", i-1, " goles es igual a ", rft[i,7]))
+  print(paste("Probabilidad marginal de que el equipo local que juega en casa anote ", i-1, " goles es igual a ", pmarg.gc[i]))
 }
 
 for (i in 1:length(pm.ftag)){
-  print(paste("Probabilidad marginal de que el equipo visitante anote ", i-1, " goles es igual a ", rft[8,i]))
+  print(paste("Probabilidad marginal de que el equipo visitante anote ", i-1, " goles es igual a ", pmarg.gv[i]))
 }
 
 # Postwork sesion 4
